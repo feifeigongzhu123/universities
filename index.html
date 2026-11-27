@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>我的大学 · 大学介绍与专业介绍</title>
+<style>
+  :root{--paper:#F5F0E6;--card:#FFFDF8;--ink:#241A26;--soft:#5A4A5C;--muted:#8B7C86;--purple:#5B0C66;--deep:#2A0631;--gold:#B58A4B;--line:rgba(91,12,102,.14);--serif:"方正粗黑宋简体","华文中宋","Songti SC","宋体",serif;--sans:"微软雅黑","Noto Sans SC",sans-serif;--num:Georgia,serif}
+  *{box-sizing:border-box}html,body{margin:0}body{background:var(--paper);color:var(--ink);font-family:var(--sans)}a{color:inherit;text-decoration:none}.wrap{max-width:1180px;margin:0 auto;padding:0 28px 60px}
+  .hero{margin:0 -28px 28px;padding:48px 50px 42px;border-radius:0 0 30px 30px;background:radial-gradient(760px 460px at 88% 0%,rgba(142,58,152,.5),transparent 65%),linear-gradient(150deg,#3B0846,#2A0631 58%,#1C0421);color:#FFF7EA;position:relative;overflow:hidden}
+  .hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:64px 64px}
+  .hero:after{content:"UNIVERSITY";position:absolute;right:-30px;bottom:-80px;font-family:var(--num);font-size:170px;color:rgba(255,255,255,.035);line-height:1;white-space:nowrap}
+  .hero>*{position:relative;z-index:1}.top{display:flex;justify-content:space-between;gap:16px;font-size:12px;letter-spacing:.18em;color:rgba(244,238,227,.55);border-bottom:1px solid rgba(255,255,255,.16);padding-bottom:15px}.top b{color:var(--gold);letter-spacing:.22em}
+  .hero h1{font-family:var(--serif);font-size:64px;font-weight:400;letter-spacing:10px;line-height:1.1;margin:34px 0 12px;color:#FFF9EE}.hero .lead{margin:0;max-width:760px;font-size:18px;line-height:1.9;color:rgba(244,238,227,.72)}.hero .lead b{color:#F0D7AC;font-weight:600}
+  .hero-stats{display:flex;gap:42px;margin-top:30px;flex-wrap:wrap}.hero-stats b{display:block;font-family:var(--num);font-size:32px;font-weight:400;color:#E3C08A}.hero-stats span{font-size:11px;letter-spacing:.08em;color:rgba(244,238,227,.55)}
+  .part{margin:42px 0 0}.part-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:20px}.part-head .idx{font-family:var(--num);font-size:14px;color:var(--gold);letter-spacing:.08em}.part-head h2{font-family:var(--serif);font-size:40px;font-weight:400;color:var(--deep);margin:5px 0 4px;letter-spacing:.04em}.part-head p{font-size:13px;line-height:1.8;color:var(--muted);margin:0;max-width:600px}.part-head .more{font-size:12px;color:var(--purple);border-bottom:1px solid rgba(91,12,102,.25);padding-bottom:3px;white-space:nowrap}
+  .portals{display:grid;grid-template-columns:1fr 1fr;gap:16px}.portal{position:relative;overflow:hidden;min-height:230px;padding:26px 28px;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);transition:.2s}.portal:hover{transform:translateY(-3px);box-shadow:0 18px 48px rgba(42,6,49,.1);border-color:rgba(91,12,102,.35)}
+  .portal:after{content:attr(data-mark);position:absolute;right:-16px;bottom:-34px;font-family:var(--num);font-size:130px;line-height:1;color:rgba(91,12,102,.045)}
+  .portal .k{font-size:11px;letter-spacing:.18em;color:var(--gold)}.portal h3{font-family:var(--serif);font-size:30px;font-weight:400;color:var(--deep);margin:7px 0 6px}.portal p{font-size:13px;line-height:1.8;color:var(--soft);margin:0 0 16px;max-width:420px}.portal .nums{display:flex;gap:24px;margin-top:auto;border-top:1px solid var(--line);padding-top:12px}.portal .nums b{display:block;font-family:var(--num);font-size:22px;color:var(--purple);font-weight:400}.portal .nums span{font-size:10px;color:var(--muted)}.portal .go{position:absolute;right:24px;top:24px;width:38px;height:38px;border-radius:50%;background:#F0E2EE;color:var(--purple);display:grid;place-items:center;font-size:17px}
+  .portal.p985{background:linear-gradient(145deg,#FFFDF8,#F6EDF7)}.portal.p211{background:linear-gradient(145deg,#FFFDF8,#EFF3F8)}
+  .major-layout{display:grid;grid-template-columns:.9fr 1.6fr;gap:24px;align-items:start}.major-copy{background:var(--card);border:1px solid var(--line);padding:24px 24px 20px}.major-copy h3{font-family:var(--serif);font-size:24px;font-weight:400;color:var(--deep);margin:0 0 8px}.major-copy p{font-size:13px;line-height:1.9;color:var(--soft);margin:0 0 16px}.cat-chips{display:flex;flex-wrap:wrap;gap:6px}.cat-chips span{font-size:11px;color:var(--purple);background:#EEE1F0;padding:5px 8px}.major-copy a{display:inline-flex;align-items:center;gap:6px;margin-top:20px;font-size:12px;color:var(--purple);border-bottom:1px solid rgba(91,12,102,.25);padding-bottom:3px}
+  .mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.mini-card{background:var(--card);border:1px solid var(--line);padding:15px 16px;transition:.2s;min-height:130px;display:flex;flex-direction:column}.mini-card:hover{border-color:rgba(91,12,102,.35);transform:translateY(-2px)}.mini-card .b{font-family:var(--num);font-size:13px;color:var(--gold);letter-spacing:.06em}.mini-card h4{font-family:var(--serif);font-size:19px;font-weight:400;margin:4px 0 4px;color:var(--deep)}.mini-card p{font-size:11px;line-height:1.6;color:var(--muted);margin:0}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:36px}.step{border-top:2px solid var(--gold);padding-top:12px}.step b{font-family:var(--num);font-size:18px;color:var(--gold);font-weight:400}.step h3{font-size:14px;margin:3px 0 4px}.step p{font-size:11.5px;line-height:1.7;color:var(--muted);margin:0}
+  .foot{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;font-size:11px;line-height:1.9;color:var(--muted)}
+  @media(max-width:900px){.wrap{padding:0 16px 40px}.hero{margin:0 -16px 22px;padding:34px 22px 30px}.hero h1{font-size:44px;letter-spacing:5px}.portals,.major-layout{grid-template-columns:1fr}.mini-grid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr}}
+  @media(max-width:560px){.hero h1{font-size:36px}.mini-grid{grid-template-columns:1fr}.part-head h2{font-size:30px}}
+</style>
+</head>
+<body><div class="wrap">
+  <section class="hero">
+    <div class="top"><span><b>我的大学</b> · 内容目录</span><span>DATA AS OF 2026.11</span></div>
+    <h1>我的大学</h1>
+    <p class="lead">两大部分：<b>大学介绍</b>看一所学校的气质、专业和出路；<b>专业介绍</b>看一个专业学什么、几年怎么过、毕业做什么。</p>
+    <div class="hero-stats"><div><b>115</b><span>所大学</span></div><div><b>45</b><span>个通用专业</span></div><div><b>640</b><span>张图</span></div><div><b>640</b><span>段语音</span></div><div><b>7</b><span>大地区</span></div></div>
+  </section>
+
+  <section class="part">
+    <div class="part-head"><div><div class="idx">01 / 大学介绍</div><h2>先选一所大学</h2><p>985 和 211 分开看。每所学校四张图、四段语音：气质、6 个代表专业、毕业去向和校园生活。</p></div><a class="more" href="index985.html">先看 985 →</a></div>
+    <div class="portals">
+      <a class="portal p985" data-mark="985" href="index985.html"><div class="k">985 · 39 所</div><h3>985 图鉴</h3><p>从清华、北大到兰大、西农，按地区筛选，点开就能听完整介绍。</p><div class="nums"><div><b>39</b><span>所学校</span></div><div><b>234</b><span>个代表专业</span></div><div><b>21</b><span>座城市</span></div></div><div class="go">→</div></a>
+      <a class="portal p211" data-mark="211" href="index211.html"><div class="k">211 · 76 所</div><h3>211 图鉴</h3><p>覆盖全部非 985 的 211，补齐北工大、合工大、太原理工、新疆大学等 76 所。</p><div class="nums"><div><b>76</b><span>所学校</span></div><div><b>456</b><span>个代表专业</span></div><div><b>35</b><span>座城市</span></div></div><div class="go">→</div></a>
+    </div>
+  </section>
+
+  <section class="part">
+    <div class="part-head"><div><div class="idx">02 / 专业介绍</div><h2>再看一个专业</h2><p>通用专业介绍：讲专业本身。每个专业四张图、四段语音：三条主线、核心课程、四年/五年规划、毕业去向和适合谁。</p></div><a class="more" href="majors.html">全部 45 个 →</a></div>
+    <div class="major-layout">
+      <div class="major-copy"><h3>45 个通用专业</h3><p>从计算机、临床医学到法学、金融、数据科学，先把“这个专业到底学什么”讲清楚，再决定要不要报。</p><div class="cat-chips"><span>工学</span><span>理学</span><span>医学</span><span>经济学</span><span>管理学</span><span>法学</span><span>文学</span></div><a href="majors.html">进入专业目录 →</a></div>
+      <div class="mini-grid" id="miniGrid"></div>
+    </div>
+  </section>
+
+  <div class="steps"><div class="step"><b>01</b><h3>先看大学</h3><p>确定城市、气质和强势方向，别只看校名。</p></div><div class="step"><b>02</b><h3>再看专业</h3><p>同一专业在不同学校，课程和方向可能不一样。</p></div><div class="step"><b>03</b><h3>点开听</h3><p>四张图配四段语音，自动播放，不弹窗。</p></div></div>
+  <div class="foot"><b>数据口径：</b>本页为个人整理的非官方页面，不含分省录取分数；保研率为第三方统计口径。所有数据以学校本科招生网及各省考试院最新公布为准。无二维码，纯静态网页。</div>
+</div>
+<script src="data/schools.js"></script><script src="data/schools_extra.js"></script><script src="data/dut_rich.js"></script><script src="data/schools_211.js"></script><script src="data/majors.js"></script>
+<script>
+(function(){
+  var picks=['cs','ai','clinical','finance','law','data'];
+  var grid=document.getElementById('miniGrid');
+  grid.innerHTML=picks.map(function(id){var m=window.MAJORS&&window.MAJORS[id];if(!m)return '';return '<a class="mini-card" href="major.html?id='+id+'"><div class="b">'+m.badge+'</div><h4>'+m.name+'</h4><p>'+m.def+'</p></a>'}).join('');
+})();
+</script>
+</body></html>

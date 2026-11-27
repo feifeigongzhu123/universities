@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>专业目录 · 我的大学</title>
+<style>
+  :root{--paper:#F5F0E6;--card:#FFFDF8;--ink:#241A26;--soft:#5A4A5C;--muted:#8B7C86;--purple:#5B0C66;--deep:#2A0631;--gold:#B58A4B;--line:rgba(91,12,102,.14);--serif:"方正粗黑宋简体","华文中宋","Songti SC","宋体",serif;--sans:"微软雅黑","Noto Sans SC",sans-serif;--num:Georgia,serif}
+  *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans)}a{color:inherit;text-decoration:none}.wrap{max-width:1180px;margin:0 auto;padding:0 28px 60px}
+  .hero{margin:0 -28px 26px;padding:46px 48px 40px;border-radius:0 0 28px 28px;background:radial-gradient(700px 420px at 88% 0%,rgba(142,58,152,.48),transparent 65%),linear-gradient(150deg,#3B0846,#2A0631 58%,#1C0421);color:#FFF7EA;position:relative;overflow:hidden}
+  .hero:after{content:"MAJORS";position:absolute;right:-30px;bottom:-70px;font-family:var(--num);font-size:190px;color:rgba(255,255,255,.035)}
+  .hero .top{display:flex;justify-content:space-between;gap:16px;font-size:12px;letter-spacing:.16em;color:rgba(244,238,227,.55);border-bottom:1px solid rgba(255,255,255,.16);padding-bottom:14px}.hero .top b{color:var(--gold);letter-spacing:.2em}
+  .hero h1{font-family:var(--serif);font-size:58px;font-weight:400;letter-spacing:8px;margin:30px 0 10px;color:#FFF9EE}.hero p{margin:0;max-width:720px;font-size:16px;line-height:1.9;color:rgba(244,238,227,.7)}.hero .stats{display:flex;gap:34px;margin-top:30px;flex-wrap:wrap}.hero .stat b{display:block;font-family:var(--num);font-size:30px;color:#E3C08A;font-weight:400}.hero .stat span{font-size:11px;letter-spacing:.1em;color:rgba(244,238,227,.55)}
+  .toolbar{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:26px 0 14px}.toolbar h2{font-family:var(--serif);font-size:28px;font-weight:400;margin:0;color:var(--deep)}.toolbar .hint{font-size:12px;color:var(--muted)}.tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}.search{flex:1;min-width:220px;background:var(--card);border:1px solid var(--line);padding:12px 16px;font-size:14px;outline:none}.filters{display:flex;gap:8px;flex-wrap:wrap}.filters button{font-size:12px;color:var(--soft);background:transparent;border:1px solid var(--line);padding:8px 12px;cursor:pointer}.filters button.on{background:var(--purple);border-color:var(--purple);color:#fff}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);padding:20px;min-height:220px;display:flex;flex-direction:column;transition:.2s}.card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(42,6,49,.09);border-color:rgba(91,12,102,.35)}.card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.badge{width:46px;height:46px;border-radius:12px;background:linear-gradient(145deg,#FFF8EC,#F0DEBE);color:var(--deep);display:grid;place-items:center;font-family:var(--num);font-size:15px;font-weight:700}.cat{font-size:10px;letter-spacing:.14em;color:var(--gold)}.card h3{font-family:var(--serif);font-size:24px;font-weight:400;line-height:1.25;margin:0 0 4px;color:var(--deep)}.card .en{font-family:var(--num);font-size:9px;letter-spacing:.12em;color:var(--muted);margin-bottom:10px;min-height:18px}.card p{font-size:12.5px;line-height:1.75;color:var(--soft);margin:0 0 12px}.card .tags{margin-top:auto;display:flex;flex-wrap:wrap;gap:5px}.card .tags span{font-size:10px;color:var(--purple);background:#EEE1F0;padding:4px 7px}.foot{margin-top:34px;border-top:1px solid var(--line);padding-top:16px;font-size:11px;line-height:1.9;color:var(--muted)}
+  @media(max-width:900px){.wrap{padding:0 16px 40px}.hero{margin:0 -16px 20px;padding:34px 22px 30px}.hero h1{font-size:40px;letter-spacing:4px}.grid{grid-template-columns:1fr 1fr}}@media(max-width:560px){.grid{grid-template-columns:1fr}.toolbar{display:block}.toolbar .hint{display:block;margin-top:6px}}
+</style>
+</head>
+<body><div class="wrap">
+  <section class="hero"><div class="top"><span><b>我的大学</b> · 专业目录</span><span>45 个通用专业 · DATA 2026.11</span></div><h1>专业目录</h1><p>通用专业介绍：学什么、几年怎么过、毕业做什么、适合谁。点开一个专业，四张图配四段语音自动播放。</p><div class="stats"><div class="stat"><b>45</b><span>个专业</span></div><div class="stat"><b>4</b><span>张图 / 专业</span></div><div class="stat"><b>180</b><span>段语音</span></div><div class="stat"><b>7</b><span>大学科门类</span></div></div></section>
+  <div class="toolbar"><h2>选一个专业</h2><span class="hint">共 <b id="count">45</b> 个 · 点击卡片播放</span></div>
+  <div class="tools"><input class="search" id="search" type="search" placeholder="搜专业，例如：计算机、临床、金融"><div class="filters" id="filters"><button class="on" data-f="all">全部</button><button data-f="工学">工学</button><button data-f="理学">理学</button><button data-f="医学">医学</button><button data-f="经济学">经济学</button><button data-f="管理学">管理学</button><button data-f="法学">法学</button><button data-f="文学">文学</button></div></div>
+  <div class="grid" id="grid"></div>
+  <div class="foot"><b>说明：</b>本页为通用专业介绍，不含分省录取分数。专业目录、选科要求和培养方案，以教育部及高校本科招生网最新公布为准。<br>本页为个人整理的非官方页面，无二维码，纯静态网页。</div>
+</div>
+<script src="data/majors.js"></script>
+<script>
+(function(){
+  var grid=document.getElementById('grid'),count=document.getElementById('count'),bar=document.getElementById('filters'),search=document.getElementById('search'),active='all';
+  var ids=window.MAJOR_ORDER||[];
+  function card(m){return '<a class="card" href="major.html?id='+encodeURIComponent(m.id)+'"><div class="top"><div class="badge">'+m.badge+'</div><div class="cat">'+m.degree+'</div></div><h3>'+m.name+'</h3><div class="en">'+m.en+'</div><p>'+m.def+'</p><div class="tags">'+m.tags.map(function(t){return '<span>'+t+'</span>'}).join('')+'</div></a>'}
+  function render(){var q=search.value.trim().toLowerCase();var list=ids.map(function(id){return window.MAJORS[id]}).filter(function(m){if(!m)return false;var ok=active==='all'||m.degree===active;var text=(m.name+' '+m.en+' '+m.def+' '+m.tags.join(' ')).toLowerCase();return ok&&(!q||text.indexOf(q)>=0)});grid.innerHTML=list.map(card).join('');count.textContent=list.length}
+  bar.onclick=function(e){var b=e.target.closest('button');if(!b)return;active=b.getAttribute('data-f');bar.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});render()};search.oninput=render;render();
+})();
+</script></body></html>

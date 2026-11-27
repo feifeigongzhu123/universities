@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>计算机科学与技术 · 四图</title>
+<style>
+  :root{
+    --paper:#F5F0E6;--card:#FFFDF8;--ink:#241A26;--soft:#4A3B4D;--muted:#7B6E78;
+    --purple:#5B0C66;--deep:#2A0631;--mid:#7C1B88;--gold:#B58A4B;--gold-light:#D9B97F;
+    --lilac:#D9B8E3;--lilac-pale:#EEE1F0;--line:rgba(91,12,102,.16);
+    --green:#2F6B3F;--red:#8C1D40;
+    --serif:"方正粗黑宋简体","华文中宋","Songti SC","宋体",serif;
+    --kai:"华文楷体","KaiTi","楷体",serif;
+    --sans:"微软雅黑","Noto Sans SC","Microsoft YaHei",sans-serif;
+    --num:Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#111;}
+  body{width:1080px;font-family:var(--sans);-webkit-font-smoothing:antialiased;}
+  .slide{width:1080px;height:1920px;position:relative;overflow:hidden;background:var(--paper);color:var(--ink);}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:17px;letter-spacing:.16em;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:16px;}
+  .topbar .brand{color:var(--gold);font-weight:700;letter-spacing:.2em;}
+
+  /* cover */
+  .cover{
+    background:
+      radial-gradient(900px 700px at 84% 0%,rgba(142,58,152,.55),transparent 62%),
+      linear-gradient(155deg,#3B0846 0%,#2A0631 52%,#1C0421 100%);
+    color:#FFF7EA;
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+    background-size:70px 70px;
+  }
+  .cover::after{
+    content:attr(data-badge);position:absolute;right:-40px;bottom:-160px;
+    font-family:var(--num);font-size:700px;line-height:1;color:rgba(255,255,255,.03);
+  }
+  .cover-inner{position:relative;z-index:1;height:100%;padding:64px 72px 0;display:flex;flex-direction:column;}
+  .cover .topbar{color:rgba(244,238,227,.5);border-color:rgba(255,255,255,.16);}
+  .cover .topbar .brand{color:var(--gold-light);}
+  .badge-row{display:flex;align-items:center;gap:24px;margin-top:54px;}
+  .badge{width:132px;height:132px;border-radius:26px;background:linear-gradient(145deg,#FFF8EC,#F0DEBE);color:var(--deep);display:grid;place-items:center;font-family:var(--num);font-size:54px;font-weight:700;letter-spacing:.04em;box-shadow:0 18px 50px rgba(0,0,0,.22);}
+  .kicker{font-size:18px;letter-spacing:.22em;color:var(--gold-light);font-weight:700;}
+  .cover h1{font-family:var(--serif);font-size:98px;font-weight:400;line-height:1.15;letter-spacing:8px;color:#FFF9EE;margin:46px 0 0 -4px;}
+  .cover .en{font-family:var(--num);font-size:16px;letter-spacing:.22em;color:rgba(244,238,227,.42);margin-top:14px;}
+  .cover .def{font-family:var(--serif);font-size:38px;line-height:1.65;letter-spacing:.02em;color:#FFF4DC;margin:38px 0 12px;max-width:900px;}
+  .cover .sub{font-size:23px;line-height:1.8;color:rgba(244,238,227,.62);margin:0;max-width:850px;}
+  .tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px;}
+  .tags span{font-size:17px;letter-spacing:.08em;color:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.24);padding:7px 13px;}
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:auto;margin-bottom:190px;}
+  .fact{border-top:1px solid rgba(255,255,255,.2);padding-top:16px;}
+  .fact b{display:block;font-size:20px;color:var(--gold-light);margin-bottom:6px;font-weight:600;}
+  .fact span{font-size:16px;line-height:1.7;color:rgba(244,238,227,.66);}
+
+  /* light slides */
+  .inner{height:100%;padding:58px 72px 0;display:flex;flex-direction:column;position:relative;z-index:1;}
+  .slide:not(.cover)::after{content:attr(data-mark);position:absolute;right:-30px;top:620px;font-family:var(--num);font-size:360px;line-height:1;color:rgba(91,12,102,.035);white-space:nowrap;pointer-events:none;}
+  .head{display:flex;align-items:flex-end;gap:16px;margin-top:34px;}
+  .no{font-family:var(--num);font-size:24px;color:var(--gold);padding-bottom:7px;}
+  .title{font-family:var(--serif);font-size:72px;font-weight:400;line-height:1.1;color:var(--deep);margin:0;letter-spacing:.03em;}
+  .lead{font-size:22px;line-height:1.8;color:var(--soft);margin:18px 0 0;}
+
+  .lines3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px;}
+  .linecard{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--purple);padding:26px 22px;}
+  .linecard b{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--purple);display:block;margin-bottom:8px;}
+  .linecard span{font-size:15px;line-height:1.7;color:var(--soft);display:block;}
+  .linecard em{font-style:normal;color:var(--gold);font-size:13px;letter-spacing:.06em;display:block;margin-top:10px;}
+
+  .courses{margin-top:22px;background:var(--card);border:1px solid var(--line);padding:28px 26px;}
+  .courses h3{font-family:var(--serif);font-size:24px;font-weight:400;color:var(--deep);margin:0 0 12px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chips span{font-size:16px;color:var(--purple);background:var(--lilac-pale);border:1px solid rgba(91,12,102,.14);padding:7px 11px;}
+  .note{margin-top:18px;background:var(--lilac-pale);border-left:5px solid var(--purple);padding:18px 22px;font-size:19px;line-height:1.8;color:var(--soft);}
+  .note b{color:var(--purple);}
+  .foot{position:absolute;left:72px;right:72px;bottom:38px;display:flex;justify-content:space-between;font-size:15px;letter-spacing:.1em;color:var(--muted);}
+  .quote-band{margin-top:auto;margin-bottom:58px;background:linear-gradient(150deg,#3B0846,#220529);color:#FFF7EA;padding:26px 32px;display:flex;justify-content:space-between;align-items:center;gap:18px;min-height:240px;}
+  .quote-band p{font-family:var(--kai);font-size:24px;line-height:1.7;margin:0;color:#FFF7EA;letter-spacing:.03em;}
+  .quote-band span{font-size:12px;letter-spacing:.12em;color:rgba(244,238,227,.55);white-space:nowrap;}
+  .ability{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin-top:22px;}
+  .ability-row{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;font-size:13px;color:var(--soft);}
+  .bar{height:6px;background:rgba(91,12,102,.1);border-radius:99px;overflow:hidden;}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--mid));border-radius:99px;}
+  .ability-foot{font-size:11px;color:var(--muted);margin-top:10px;}
+  .order{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px;}
+  .order div{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--gold);padding:18px 20px;}
+  .order b{font-family:var(--num);font-size:13px;color:var(--gold);}
+  .order h3{font-family:var(--serif);font-size:20px;font-weight:400;color:var(--deep);margin:3px 0 4px;}
+  .order p{font-size:13px;line-height:1.6;color:var(--soft);margin:0;}
+  .advice{margin-top:18px;background:var(--lilac-pale);border-left:5px solid var(--purple);padding:20px 22px;font-size:15px;line-height:1.8;color:var(--soft);}
+  .advice b{color:var(--purple);}
+  .direction{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px;}
+  .direction div{background:var(--card);border:1px solid var(--line);padding:16px 18px;font-size:13px;line-height:1.6;color:var(--soft);}
+  .direction b{display:block;color:var(--purple);font-size:16px;margin-bottom:3px;}
+  .works{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px;}
+  .works div{background:var(--card);border:1px solid var(--line);padding:20px 20px;font-size:14px;line-height:1.7;color:var(--soft);}
+  .works b{display:block;color:var(--purple);font-size:16px;margin-bottom:3px;}
+  .seclabel{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--deep);margin:24px 0 10px;display:flex;align-items:center;gap:10px;}
+  .seclabel::before{content:"";width:28px;height:3px;background:var(--gold);display:block;}
+  .myths{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .myths div{background:var(--card);border:1px solid var(--line);padding:17px 18px;}
+  .myths b{display:block;font-size:13px;color:var(--red);letter-spacing:.08em;margin-bottom:4px;}
+  .myths span{font-size:14px;line-height:1.65;color:var(--soft);}
+  .prep{margin-top:16px;background:var(--card);border:1px solid var(--line);padding:20px 22px;display:grid;grid-template-columns:150px 1fr;gap:16px;}
+  .prep b{font-family:var(--serif);font-size:20px;color:var(--purple);line-height:1.4;}
+  .prep ul{margin:0;padding-left:16px;font-size:14px;line-height:1.8;color:var(--soft);}
+  .prep li{margin:2px 0;}
+  .holiday{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .holiday div{background:var(--card);border-left:4px solid var(--gold);padding:18px 18px;font-size:13px;line-height:1.65;color:var(--soft);}
+  .holiday b{display:block;color:var(--purple);font-size:15px;margin-bottom:3px;}
+  .portfolio{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .portfolio div{background:var(--card);border:1px solid var(--line);padding:18px 18px;font-size:13px;line-height:1.65;color:var(--soft);}
+  .portfolio b{display:block;color:var(--purple);font-size:15px;margin-bottom:3px;}
+  .day{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .day div{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--purple);padding:16px 18px;font-size:13px;line-height:1.65;color:var(--soft);}
+  .day b{display:block;color:var(--purple);font-size:15px;margin-bottom:3px;}
+  .path{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .path div{background:var(--card);border-left:4px solid var(--gold);padding:16px 18px;font-size:13px;line-height:1.65;color:var(--soft);}
+  .path b{display:block;color:var(--purple);font-size:15px;margin-bottom:3px;}
+  .industries{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+  .industries span{font-size:13px;color:var(--purple);background:var(--lilac-pale);border:1px solid rgba(91,12,102,.14);padding:5px 9px;}
+  .donts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+  .donts div{background:var(--card);border-left:4px solid var(--red);padding:14px 18px;font-size:13px;line-height:1.7;color:var(--soft);}
+  .donts b{color:var(--red);}
+  .grad{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .grad span{font-size:13px;color:var(--purple);border:1px solid rgba(91,12,102,.18);background:var(--card);padding:5px 9px;border-radius:20px;}
+
+  /* years + fit */
+  .years{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px;}
+  .year{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--purple);padding:24px 24px;}
+  .year b{font-family:var(--num);font-size:14px;color:var(--gold);letter-spacing:.06em;}
+  .year h3{font-family:var(--serif);font-size:24px;font-weight:400;color:var(--deep);margin:4px 0 6px;}
+  .year p{font-size:15px;line-height:1.7;color:var(--soft);margin:0;}
+  .year span{display:block;font-size:13px;color:var(--purple);margin-top:7px;}
+
+  .fit{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px;}
+  .fitcard{border:1px solid var(--line);padding:22px 22px;background:var(--card);}
+  .fitcard.good{border-top:4px solid var(--green);}
+  .fitcard.bad{border-top:4px solid var(--red);}
+  .fitcard h3{font-family:var(--serif);font-size:22px;font-weight:400;margin:0 0 8px;}
+  .fitcard ul{margin:0;padding-left:18px;font-size:15px;line-height:1.8;color:var(--soft);}
+  .fitcard li{margin:3px 0;}
+
+  /* careers */
+  .careers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px;}
+  .career{background:var(--card);border:1px solid var(--line);padding:18px 22px;position:relative;overflow:hidden;}
+  .career::after{content:attr(data-no);position:absolute;right:8px;bottom:-20px;font-family:var(--num);font-size:78px;color:rgba(91,12,102,.05);line-height:1;}
+  .career b{font-size:12px;letter-spacing:.14em;color:var(--gold);}
+  .career h3{font-family:var(--serif);font-size:22px;font-weight:400;color:var(--deep);margin:4px 0 6px;}
+  .career p{font-size:15px;line-height:1.7;color:var(--soft);margin:0;}
+  .career span{display:block;font-size:13px;color:var(--muted);margin-top:6px;}
+  .closing{margin-top:auto;margin-bottom:58px;background:linear-gradient(150deg,#3B0846,#220529);color:#FFF7EA;padding:28px 30px;min-height:260px;display:flex;justify-content:space-between;align-items:center;gap:18px;}
+  .closing h2{font-family:var(--serif);font-size:38px;font-weight:400;letter-spacing:.05em;margin:0 0 6px;color:#FFF9EE;}
+  .closing p{font-size:15px;line-height:1.7;color:rgba(244,238,227,.6);margin:0;}
+  .closing .side{font-size:13px;line-height:1.8;color:rgba(244,238,227,.55);text-align:right;white-space:nowrap;}
+  .closing .side b{display:block;color:var(--gold-light);font-family:var(--num);font-size:24px;font-weight:400;}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<script>
+(function(){
+  var deck = document.getElementById('deck');
+  var slides = [];
+
+  // 01 cover
+  slides.push('<section class="slide cover"><div class="cover-inner">'
+    +'<div class="topbar"><span class="brand">我的大学 · 专业介绍</span><span>计算机类</span><span>01 / 04</span></div>'
+    +'<div class="badge-row"><div class="badge">CS</div><div class="kicker">UNDERGRADUATE MAJOR · NO.01</div></div>'
+    +'<h1>计算机科学与技术</h1>'
+    +'<div class="en">COMPUTER SCIENCE AND TECHNOLOGY</div>'
+    +'<div class="def">研究计算机怎么算、怎么存、怎么连、怎么变聪明。</div>'
+    +'<p class="sub">从手机里的推荐算法，到卫星上的控制系统，背后都是这套知识。</p>'
+    +'<div class="tags"><span>工学</span><span>计算机类</span><span>四年制</span><span>数学要求高</span></div>'
+    +'<div class="facts">'
+    +'<div class="fact"><b>三条主线</b><span>理论 · 系统 · 应用</span></div>'
+    +'<div class="fact"><b>不是什么</b><span>修电脑 · 只会写代码</span></div>'
+    +'<div class="fact"><b>适合谁</b><span>爱拆问题 · 能坐得住</span></div>'
+    +'</div></div></section>');
+
+  // 02 what you learn
+  slides.push('<section class="slide" data-mark="LEARN"><div class="inner">'
+    +'<div class="topbar"><span class="brand">我的大学 · 专业介绍</span><span>计算机科学与技术</span><span>02 / 04</span></div>'
+    +'<div class="head"><div class="no">02</div><h2 class="title">到底学什么</h2></div>'
+    +'<p class="lead">四年的课表可以拆成三条主线：<b>理论</b>、<b>系统</b>、<b>应用</b>。缺一条，都容易“只会用工具，不会造工具”。</p>'
+    +'<div class="lines3">'
+    +'<div class="linecard"><b>理论</b><span>数学、算法、复杂度、逻辑。决定你能走多深。</span><em>数学分析 · 线代 · 离散 · 算法</em></div>'
+    +'<div class="linecard"><b>系统</b><span>芯片、操作系统、网络、编译。决定你能不能做出真东西。</span><em>组成原理 · OS · 网络 · 编译</em></div>'
+    +'<div class="linecard"><b>应用</b><span>软件、数据、AI、图形。决定你毕业能做什么。</span><em>数据库 · 软件工程 · AI · 项目</em></div>'
+    +'</div>'
+    +'<div class="courses"><h3>核心课程</h3><div class="chips">'
+    +'<span>高等数学</span><span>线性代数</span><span>概率统计</span><span>离散数学</span><span>程序设计</span><span>数据结构</span><span>算法设计与分析</span><span>计算机组成原理</span><span>操作系统</span><span>计算机网络</span><span>数据库系统</span><span>编译原理</span><span>软件工程</span><span>人工智能基础</span>'
+    +'</div></div>'
+    +'<div class="note"><b>不是“修电脑”：</b>装系统、修电脑只是最表层。这个专业真正训练的是抽象能力、系统思维和工程能力——把模糊问题拆成可计算、可实现、可验证的步骤。</div>'
+    +'<div class="ability">'
+    +'<div class="ability-row"><span>数学基础</span><div class="bar"><i style="width:82%"></i></div></div>'
+    +'<div class="ability-row"><span>编程实现</span><div class="bar"><i style="width:95%"></i></div></div>'
+    +'<div class="ability-row"><span>系统思维</span><div class="bar"><i style="width:86%"></i></div></div>'
+    +'<div class="ability-row"><span>算法设计</span><div class="bar"><i style="width:90%"></i></div></div>'
+    +'<div class="ability-row"><span>工程协作</span><div class="bar"><i style="width:74%"></i></div></div>'
+    +'<div class="ability-row"><span>持续学习</span><div class="bar"><i style="width:92%"></i></div></div>'
+    +'</div>'
+    +'<div class="ability-foot">学习画像（示意），不是对个人的评估。</div>'
+    +'<div class="order">'
+    +'<div><b>STEP 01</b><h3>先学会写</h3><p>编程、数据结构、小项目。先把想法变成能跑的程序。</p></div>'
+    +'<div><b>STEP 02</b><h3>再看懂机器</h3><p>组成、操作系统、网络。知道程序在机器上怎么跑。</p></div>'
+    +'<div><b>STEP 03</b><h3>最后选方向</h3><p>AI、系统、数据、安全。用一个方向把能力串起来。</p></div>'
+    +'</div>'
+    +'<div class="seclabel">三个常见误解</div>'
+    +'<div class="myths">'
+    +'<div><b>误解 01</b><span>数学不好就学不了？数学重要，但更看重持续补的能力。</span></div>'
+    +'<div><b>误解 02</b><span>会写代码就能做系统？代码只是表达，系统能力靠组成、OS、网络。</span></div>'
+    +'<div><b>误解 03</b><span>AI 会替代程序员？工具在变，抽象和工程能力仍是底座。</span></div>'
+    +'</div>'
+    +'<div class="prep"><b>高中可以<br>先准备</b><ul>'
+    +'<li>把数学学扎实，尤其是函数、数列、概率。</li>'
+    +'<li>学一门语言，写出第一个能运行的小工具。</li>'
+    +'<li>养成查文档、拆问题、记录错误的习惯。</li>'
+    +'</ul></div>'
+    +'<div class="seclabel">课堂之外</div>'
+    +'<div class="industries"><span>程序设计竞赛</span><span>开源社区</span><span>实验室</span><span>实习</span><span>黑客松</span><span>技术社团</span></div>'
+    +'<div class="quote-band"><p>把模糊问题拆成可计算、可实现、可验证的步骤。</p><span>理论 · 系统 · 应用</span></div>'
+    +'<div class="foot"><span>专业介绍 · 计算机科学与技术</span><span>03 四年怎么过 →</span></div>'
+    +'</div></section>');
+
+  // 03 four years + fit
+  slides.push('<section class="slide" data-mark="4 YEARS"><div class="inner">'
+    +'<div class="topbar"><span class="brand">我的大学 · 专业介绍</span><span>计算机科学与技术</span><span>03 / 04</span></div>'
+    +'<div class="head"><div class="no">03</div><h2 class="title">四年怎么过</h2></div>'
+    +'<div class="years">'
+    +'<div class="year"><b>YEAR 1</b><h3>打地基</h3><p>高数、线代、程序设计和离散数学。先把“用代码表达想法”练熟。</p><span>关键词：数学 · C/Python · 习惯</span></div>'
+    +'<div class="year"><b>YEAR 2</b><h3>建系统</h3><p>数据结构、计算机组成、操作系统。开始理解程序下面的机器。</p><span>关键词：数据结构 · 组成 · 实验</span></div>'
+    +'<div class="year"><b>YEAR 3</b><h3>选方向</h3><p>AI、系统、数据、安全、图形、软件工程。做项目、找实习、准备深造。</p><span>关键词：方向课 · 项目 · 实习</span></div>'
+    +'<div class="year"><b>YEAR 4</b><h3>做作品</h3><p>毕业设计、科研、秋招。把四年学到的东西做成一个能讲清楚的作品。</p><span>关键词：毕设 · 论文 · offer</span></div>'
+    +'</div>'
+    +'<div class="fit">'
+    +'<div class="fitcard good"><h3>更适合</h3><ul><li>喜欢拆问题、讲逻辑，愿意把一件事做到能跑通。</li><li>不怕数学，至少不排斥抽象符号和证明。</li><li>能坐得住、耐得住调试，错了愿意再来一遍。</li></ul></div>'
+    +'<div class="fitcard bad"><h3>要谨慎</h3><ul><li>只冲着“高薪”来，但不准备长期学习。</li><li>讨厌数学、讨厌 debug，遇到报错就想放弃。</li><li>只想学一门语言，不愿理解系统背后的原理。</li></ul></div>'
+    +'</div>'
+    +'<div class="works">'
+    +'<div><b>课程项目</b>把一门课的作业做到能演示、能讲清楚。</div>'
+    +'<div><b>开源 / 竞赛</b>参加一个真实项目，学会协作和版本管理。</div>'
+    +'<div><b>实习 / 科研</b>去公司或实验室，看看真实问题长什么样。</div>'
+    +'</div>'
+    +'<div class="advice"><b>一句忠告：</b>不要只收藏教程，要交付作品。能跑通、能演示、能讲清楚，比“学过”更有说服力。</div>'
+    +'<div class="seclabel">三个暑假怎么用</div>'
+    +'<div class="holiday">'
+    +'<div><b>大一暑假</b>把一个课程项目做完整，补数学和英语。</div>'
+    +'<div><b>大二暑假</b>去实习或进实验室，第一次接触真实需求。</div>'
+    +'<div><b>大三暑假</b>冲夏令营 / 秋招，把项目和简历打磨好。</div>'
+    +'</div>'
+    +'<div class="seclabel">作品长什么样</div>'
+    +'<div class="portfolio">'
+    +'<div><b>能跑起来</b>别人按文档能安装、能运行，不是只在你电脑上能跑。</div>'
+    +'<div><b>能讲清楚</b>说得出问题、方案、取舍，以及你负责的部分。</div>'
+    +'<div><b>能持续迭代</b>有版本记录、有测试，知道下一步改什么。</div>'
+    +'</div>'
+    +'<div class="seclabel">四个不要</div>'
+    +'<div class="donts">'
+    +'<div><b>不要</b>只刷绩点，不做项目。</div>'
+    +'<div><b>不要</b>等到大三才开始想方向。</div>'
+    +'<div><b>不要</b>闭门造车，多找人评审。</div>'
+    +'<div><b>不要</b>只学一门语言，忽视基础。</div>'
+    +'</div>'
+    +'<div class="quote-band"><p>四年之后，你要有一个能讲清楚的作品。</p><span>课程表会结束，作品会留下</span></div>'
+    +'<div class="foot"><span>专业介绍 · 计算机科学与技术</span><span>04 毕业做什么 →</span></div>'
+    +'</div></section>');
+
+  // 04 careers
+  slides.push('<section class="slide" data-mark="CAREER"><div class="inner">'
+    +'<div class="topbar"><span class="brand">我的大学 · 专业介绍</span><span>计算机科学与技术</span><span>04 / 04</span></div>'
+    +'<div class="head"><div class="no">04</div><h2 class="title">毕业做什么</h2></div>'
+    +'<p class="lead">不是只有“程序员”一条路。出口大致分四类：<b>做产品</b>、<b>做系统</b>、<b>做算法</b>、<b>做研究</b>。</p>'
+    +'<div class="careers">'
+    +'<div class="career" data-no="01"><b>PRODUCT</b><h3>软件开发工程师</h3><p>把需求变成可上线的软件：后端、前端、移动端、全栈。</p><span>互联网 · 金融科技 · 企业软件 · 游戏</span></div>'
+    +'<div class="career" data-no="02"><b>AI / ALGORITHM</b><h3>算法工程师</h3><p>推荐、搜索、视觉、语音、大模型。数学和工程都要硬。</p><span>互联网 · AI 公司 · 自动驾驶 · 量化</span></div>'
+    +'<div class="career" data-no="03"><b>SYSTEMS</b><h3>系统 / 基础架构</h3><p>操作系统、数据库、编译器、云平台、芯片软件栈。</p><span>云计算 · 芯片 · 数据库 · 军工</span></div>'
+    +'<div class="career" data-no="04"><b>DATA</b><h3>数据工程 / 分析</h3><p>数据管道、数据仓库、分析模型。既懂技术又懂业务。</p><span>互联网 · 金融 · 零售 · 医疗</span></div>'
+    +'<div class="career" data-no="05"><b>SECURITY</b><h3>网络安全工程师</h3><p>攻防、漏洞、密码、安全合规。对抗性强，持续学习。</p><span>安全公司 · 金融 · 政企 · 军工</span></div>'
+    +'<div class="career" data-no="06"><b>RESEARCH</b><h3>读研 / 科研</h3><p>计算机、软件、AI、网安、数据科学等方向。</p><span>高校 · 研究所 · 企业研究院</span></div>'
+    +'</div>'
+    +'<div class="grad"><span>计算机科学与技术</span><span>软件工程</span><span>人工智能</span><span>网络空间安全</span><span>数据科学</span></div>'
+    +'<div class="direction">'
+    +'<div><b>喜欢做产品</b>软件开发、前端、移动端、产品经理。</div>'
+    +'<div><b>喜欢数学</b>算法、AI、推荐搜索、量化研究。</div>'
+    +'<div><b>喜欢底层</b>系统、数据库、编译、芯片软件、安全。</div>'
+    +'</div>'
+    +'<div class="seclabel">真实工作日常</div>'
+    +'<div class="day">'
+    +'<div><b>写代码 / 做实验</b>把一个需求拆成模块，写完还要测、要改。</div>'
+    +'<div><b>评审 / 协作</b>读别人的代码，讲自己的方案，接受质疑。</div>'
+    +'<div><b>排查 / 上线</b>定位线上问题，做监控，保证系统稳定。</div>'
+    +'</div>'
+    +'<div class="seclabel">三条典型路径</div>'
+    +'<div class="path">'
+    +'<div><b>技术专家</b>在一个方向做深：算法、系统、安全、数据。</div>'
+    +'<div><b>技术管理</b>带团队、做架构、对交付负责，沟通占一半。</div>'
+    +'<div><b>跨界发展</b>产品、创业、金融、科研，技术是底层能力。</div>'
+    +'</div>'
+    +'<div class="seclabel">主要行业</div>'
+    +'<div class="industries"><span>互联网</span><span>金融科技</span><span>芯片</span><span>云计算</span><span>自动驾驶</span><span>游戏</span><span>医疗科技</span><span>军工</span></div>'
+    +'<div class="seclabel">能力账本</div>'
+    +'<div class="ability">'
+    +'<div class="ability-row"><span>编程实现</span><div class="bar"><i style="width:95%"></i></div></div>'
+    +'<div class="ability-row"><span>数学基础</span><div class="bar"><i style="width:82%"></i></div></div>'
+    +'<div class="ability-row"><span>系统思维</span><div class="bar"><i style="width:86%"></i></div></div>'
+    +'<div class="ability-row"><span>算法设计</span><div class="bar"><i style="width:90%"></i></div></div>'
+    +'<div class="ability-row"><span>工程协作</span><div class="bar"><i style="width:74%"></i></div></div>'
+    +'<div class="ability-row"><span>持续学习</span><div class="bar"><i style="width:92%"></i></div></div>'
+    +'</div>'
+    +'<div class="ability-foot">能力账本（示意），不是对个人的评估。</div>'
+    +'<div class="closing"><div><h2>用计算的方式解决问题。</h2><p>下一站，写你的代码。</p></div><div class="side"><b>04</b>专业介绍 · 计算机科学与技术</div></div>'
+    +'</div></section>');
+
+  deck.innerHTML = slides.join('');
+})();
+</script>
+</body>
+</html>

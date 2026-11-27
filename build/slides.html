@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>985 · 四图生成</title>
+<style>
+  :root{
+    --paper:#F5F0E6;--ink:#241A26;--muted:#7B6E78;--line:rgba(36,26,38,.16);
+    --c:#5B0C66;--cd:#2A0631;--accent:#B58A4B;
+    --serif:"方正粗黑宋简体","华文中宋","Songti SC","宋体",serif;
+    --kai:"华文楷体","KaiTi","楷体",serif;
+    --sans:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+    --num:Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#111;}
+  body{width:1080px;font-family:var(--sans);-webkit-font-smoothing:antialiased;}
+  .slide{width:1080px;height:1920px;position:relative;overflow:hidden;background:var(--paper);color:var(--ink);}
+
+  /* ---------- cover ---------- */
+  .cover{
+    background:
+      radial-gradient(900px 700px at 82% 0%,color-mix(in srgb,var(--c) 70%,#ffffff 0%),transparent 62%),
+      linear-gradient(155deg,color-mix(in srgb,var(--cd) 80%,#000 20%),var(--cd) 58%,#0B020D 100%);
+    color:#FFF7EA;
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+    background-size:70px 70px;
+  }
+  .cover::after{
+    content:attr(data-mark);position:absolute;right:-50px;bottom:-150px;
+    font-family:var(--serif);font-size:560px;line-height:1;color:rgba(255,255,255,.035);white-space:nowrap;
+  }
+  .cover>*{position:relative;z-index:2;}
+  .cover-inner{height:100%;padding:64px 72px 0;display:flex;flex-direction:column;}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:17px;letter-spacing:.16em;color:rgba(255,247,234,.55);border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:16px;}
+  .topbar .brand{color:var(--accent);font-weight:700;letter-spacing:.2em;}
+  .cover-head{display:flex;align-items:center;gap:26px;margin-top:54px;}
+  .seal{width:142px;height:142px;border-radius:50%;display:grid;place-items:center;flex:none;border:1px solid rgba(255,255,255,.22);overflow:hidden;}
+  .seal img{width:84%;height:84%;object-fit:contain;display:block;}
+  .seal.mono{background:var(--c);color:#fff;font-family:var(--serif);font-size:58px;line-height:1;letter-spacing:.02em;text-align:center;}
+  .seal.mono small{display:block;font-family:var(--num);font-size:13px;letter-spacing:.1em;margin-top:3px;opacity:.7;}
+  .cover-kicker{font-size:23px;letter-spacing:.08em;color:color-mix(in srgb,var(--accent) 80%,white 20%);}
+  .cover-right{margin-left:auto;width:156px;height:156px;border:1px dashed rgba(255,255,255,.4);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-8deg);color:rgba(255,247,234,.8);flex:none;}
+  .cover-right b{font-family:var(--num);font-size:48px;line-height:1;font-weight:400;}
+  .cover-right span{font-size:12px;letter-spacing:.16em;margin-top:4px;}
+  .cover-name{font-family:var(--serif);font-weight:400;line-height:1.05;letter-spacing:8px;margin:52px 0 0 -4px;color:#FFF9EE;}
+  .cover-en{font-family:var(--num);font-size:17px;letter-spacing:.22em;color:rgba(255,247,234,.4);margin-top:14px;}
+  .cover-hook{font-family:var(--serif);font-size:44px;line-height:1.6;letter-spacing:.03em;color:#FFF4DC;margin:34px 0 10px;max-width:900px;}
+  .cover-sub{font-size:25px;line-height:1.8;color:rgba(255,247,234,.62);margin:0;max-width:860px;}
+  .cover-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px;}
+  .cover-tags span{font-size:18px;letter-spacing:.08em;color:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.24);padding:7px 14px;}
+  .cover-stats{margin-top:auto;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.1);padding:24px 0;margin-bottom:110px;}
+  .cover-stat{padding:0 14px;border-right:1px solid rgba(255,255,255,.12);}
+  .cover-stat:last-child{border-right:none;}
+  .cover-stat b{display:block;font-family:var(--num);font-size:50px;font-weight:400;line-height:1;color:color-mix(in srgb,var(--accent) 70%,white 30%);}
+  .cover-stat b small{font-family:var(--sans);font-size:17px;margin-left:3px;}
+  .cover-stat span{display:block;font-size:16px;color:rgba(255,247,234,.7);margin-top:7px;line-height:1.45;}
+  .cover-foot{position:absolute;left:72px;right:72px;bottom:44px;display:flex;justify-content:space-between;font-size:16px;letter-spacing:.1em;color:rgba(255,247,234,.42);}
+  .cover-foot b{color:var(--accent);font-weight:600;}
+
+  /* ---------- majors ---------- */
+  .majors{background:var(--paper);}
+  .majors > .topbar{padding:58px 72px 0;}
+  .majors .inner{height:100%;padding:22px 72px 42px;display:flex;flex-direction:column;}
+  .m-head{display:flex;align-items:flex-end;gap:16px;margin-top:26px;}
+  .m-no{font-family:var(--num);font-size:24px;color:var(--accent);padding-bottom:7px;}
+  .m-title{font-family:var(--serif);font-size:70px;font-weight:400;line-height:1.1;color:var(--cd);margin:0;letter-spacing:.03em;}
+  .m-sub{font-size:23px;line-height:1.7;color:#5A4A5C;margin:14px 0 0 40px;}
+  .m-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px;}
+  .m-grid.standard{grid-template-columns:1fr 1fr;}
+  .m-card{min-height:395px;background:#FFFDF8;border:1px solid var(--line);border-top:4px solid var(--c);padding:20px 22px 16px;position:relative;overflow:hidden;}
+  .m-card::after{content:attr(data-no);position:absolute;right:8px;bottom:-24px;font-family:var(--num);font-size:104px;line-height:1;color:color-mix(in srgb,var(--c) 6%,white);}
+  .m-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+  .m-card .no{font-family:var(--num);font-size:19px;color:var(--accent);}
+  .m-tag{font-size:14px;color:var(--c);background:color-mix(in srgb,var(--c) 8%,white);padding:4px 8px;border-radius:2px;}
+  .m-card h3{font-family:var(--serif);font-size:35px;font-weight:400;line-height:1.2;margin:0 0 3px;color:var(--cd);}
+  .m-card .sub{font-size:17px;color:var(--c);font-weight:700;letter-spacing:.06em;margin-bottom:12px;}
+  .m-line{font-size:20px;line-height:1.55;color:#4A3B4D;margin:0 0 6px;}
+  .m-line b{font-size:15px;color:var(--accent);letter-spacing:.08em;margin-right:5px;}
+  .m-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+  .m-tags span{font-size:14px;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 20%,white);padding:3px 7px;border-radius:20px;}
+  .m-note{margin-top:18px;background:color-mix(in srgb,var(--c) 7%,white);border-left:5px solid var(--c);padding:16px 22px;font-size:19px;line-height:1.7;color:#4A3B4D;}
+  .m-note b{color:var(--c);}
+  .m-strip{margin-top:16px;background:var(--cd);color:#FFF7EA;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:20px;}
+  .m-strip p{margin:0;font-size:19px;line-height:1.7;color:rgba(255,247,234,.82);}
+  .m-strip b{color:var(--accent);}
+  .m-strip .go{font-size:19px;color:var(--accent);white-space:nowrap;}
+  .m-foot{margin-top:14px;font-size:15px;line-height:1.6;color:var(--muted);border-top:1px solid rgba(36,26,38,.1);padding-top:12px;display:flex;justify-content:space-between;gap:12px;}
+  .m-foot b{color:var(--c);}
+
+  /* ---------- outcomes ---------- */
+  .out-top{height:1080px;background:linear-gradient(155deg,var(--c),var(--cd) 62%,#0B020D);color:#FFF7EA;position:relative;overflow:hidden;}
+  .out-top::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:64px 64px;}
+  .out-top::after{content:attr(data-mark);position:absolute;right:-40px;bottom:-130px;font-family:var(--serif);font-size:460px;line-height:1;color:rgba(255,255,255,.035);white-space:nowrap;pointer-events:none;}
+  .out-top .inner{position:relative;z-index:2;height:100%;padding:58px 72px 0;}
+  .out-head{display:flex;align-items:flex-end;gap:16px;margin-top:26px;}
+  .out-no{font-family:var(--num);font-size:24px;color:var(--accent);padding-bottom:7px;}
+  .out-title{font-family:var(--serif);font-size:70px;font-weight:400;color:#FFF9EE;margin:0;letter-spacing:.03em;}
+  .out-big{display:flex;align-items:flex-end;gap:18px;margin-top:30px;}
+  .out-big .n{font-family:var(--num);font-size:172px;line-height:.85;color:color-mix(in srgb,var(--accent) 70%,white 30%);letter-spacing:-.02em;}
+  .out-big .n small{font-size:56px;}
+  .out-big .t{font-size:22px;line-height:1.6;color:rgba(255,247,234,.72);padding-bottom:14px;}
+  .out-big .t b{display:block;color:#FFF7EA;font-size:25px;margin-bottom:4px;}
+  .out-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px;}
+  .out-mini div{border-top:1px solid rgba(255,255,255,.2);padding-top:14px;}
+  .out-mini b{display:block;font-family:var(--num);font-size:40px;font-weight:400;color:#FFF3D8;line-height:1.1;}
+  .out-mini span{display:block;font-size:17px;line-height:1.6;color:rgba(255,247,234,.55);margin-top:3px;}
+  .out-comlabel{font-size:15px;letter-spacing:.18em;color:color-mix(in srgb,var(--accent) 70%,white 30%);margin-top:26px;font-weight:700;}
+  .out-companies{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .out-companies span{font-size:18px;color:rgba(255,247,234,.86);border:1px solid rgba(255,255,255,.2);padding:6px 10px;}
+  .out-quote{margin-top:24px;padding-top:18px;border-top:1px solid rgba(255,255,255,.16);font-family:var(--kai,"华文楷体",serif);font-size:27px;line-height:1.65;color:rgba(255,247,234,.78);}
+  .out-takeaway{margin-top:20px;font-size:21px;line-height:1.8;color:rgba(255,247,234,.55);border-left:3px solid color-mix(in srgb,var(--accent) 60%,white 40%);padding-left:14px;}
+  .out-bottom{height:840px;background:var(--paper);padding:40px 72px 0;position:relative;overflow:hidden;}
+  .out-bottom::after{content:attr(data-series);position:absolute;right:18px;bottom:-70px;font-family:var(--num);font-size:250px;line-height:1;color:rgba(36,26,38,.035);pointer-events:none;}
+  .out-bottom > *{position:relative;z-index:1;}
+  .out-bhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;}
+  .out-bhead h2{font-family:var(--serif);font-size:52px;font-weight:400;color:var(--cd);margin:0;letter-spacing:.03em;}
+  .out-bhead span{font-size:16px;color:var(--muted);padding-bottom:6px;}
+  .score-table{width:100%;border-collapse:collapse;margin-top:22px;}
+  .score-table th{text-align:left;font-size:15px;letter-spacing:.08em;color:var(--accent);font-weight:700;padding:0 0 8px;border-bottom:1px solid var(--line);}
+  .score-table td{font-size:20px;color:#4A3B4D;padding:15px 0;border-bottom:1px dashed rgba(36,26,38,.12);}
+  .score-table td.n{font-family:var(--num);font-size:28px;color:var(--c);}
+  .out-note{font-size:16px;line-height:1.7;color:var(--muted);margin:12px 0 0;}
+  .out-tips{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:20px;}
+  .out-tips div{background:#FFFDF8;border:1px solid var(--line);padding:12px 14px;font-size:15px;line-height:1.55;color:#4A3B4D;}
+  .out-tips b{display:block;font-size:15px;color:var(--c);margin-bottom:3px;}
+  .out-profile{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin-top:18px;}
+  .out-profile div{border-right:1px solid rgba(36,26,38,.1);padding:0 12px;}
+  .out-profile div:last-child{border-right:none;}
+  .out-profile b{display:block;font-family:var(--num);font-size:26px;color:var(--c);font-weight:400;line-height:1.1;}
+  .out-profile span{display:block;font-size:14px;color:var(--muted);margin-top:3px;}
+  .out-standline{font-size:18px;line-height:1.7;color:#4A3B4D;margin:14px 0 0;}
+  .out-majorlabel{font-size:15px;letter-spacing:.18em;color:var(--c);font-weight:700;margin-top:16px;}
+  .out-majorchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;}
+  .out-majorchips span{font-size:16px;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 20%,white);background:#FFFDF8;padding:5px 9px;border-radius:999px;}
+  .out-clusters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+  .out-clusters div{background:#FFFDF8;border:1px solid var(--line);padding:10px 12px;font-size:14px;line-height:1.5;color:#4A3B4D;}
+  .out-clusters b{display:block;color:var(--c);font-size:15px;margin-bottom:2px;}
+  .out-foot{display:flex;justify-content:space-between;font-size:18px;color:var(--c);font-weight:700;margin-top:18px;}
+
+  /* ---------- campus ---------- */
+  .camp-top{height:1210px;background:var(--paper);padding:56px 72px 0;}
+  .camp-head{display:flex;align-items:flex-end;gap:16px;margin-top:22px;}
+  .camp-no{font-family:var(--num);font-size:24px;color:var(--accent);padding-bottom:6px;}
+  .camp-title{font-family:var(--serif);font-size:64px;font-weight:400;color:var(--cd);margin:0;letter-spacing:.03em;}
+  .landmark{margin-top:22px;border:1px solid var(--line);background:radial-gradient(600px 300px at 80% 10%,color-mix(in srgb,var(--accent) 16%,white),transparent 70%),#FFFDF8;padding:6px 6px 0;color:var(--c);}
+  .landmark svg{display:block;width:100%;height:auto;}
+  .camp-facts{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:20px;}
+  .camp-facts div{padding:14px 10px;border-right:1px solid rgba(36,26,38,.1);}
+  .camp-facts div:last-child{border-right:none;}
+  .camp-facts b{display:block;font-family:var(--num);font-size:31px;font-weight:400;color:var(--c);line-height:1.1;}
+  .camp-facts span{display:block;font-size:15px;color:var(--muted);margin-top:3px;}
+  .camp-guide-title{font-family:var(--serif);font-size:31px;color:var(--cd);margin:20px 0 10px;letter-spacing:.04em;}
+  .camp-guide{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+  .camp-guide div{background:#FFFDF8;border:1px solid var(--line);padding:13px 15px;font-size:17px;line-height:1.55;color:#4A3B4D;}
+  .camp-guide b{display:block;font-family:var(--num);font-size:20px;color:var(--accent);margin-bottom:3px;}
+  .camp-alumni{font-size:17px;line-height:1.7;color:var(--muted);margin-top:16px;}
+  .camp-alumni b{color:var(--c);}
+  .camp-keywords{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;}
+  .camp-keywords span{font-size:15px;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 20%,white);background:#FFFDF8;padding:4px 9px;border-radius:999px;}
+  .camp-bottom{height:710px;background:linear-gradient(155deg,var(--c),var(--cd) 62%,#0B020D);color:#FFF7EA;padding:50px 72px 0;position:relative;overflow:hidden;}
+  .camp-bottom::before{content:"“";position:absolute;left:30px;top:-40px;font-family:var(--num);font-size:250px;color:rgba(255,255,255,.08);line-height:1;}
+  .camp-bottom::after{content:attr(data-year);position:absolute;right:20px;bottom:-40px;font-family:var(--num);font-size:230px;color:rgba(255,255,255,.035);line-height:1;}
+  .camp-bottom>*{position:relative;z-index:1;}
+  .camp-quote{font-family:var(--kai,"华文楷体",serif);font-size:37px;line-height:1.7;letter-spacing:.03em;color:#FFF7EA;margin:0 0 10px;}
+  .camp-by{font-size:16px;letter-spacing:.1em;color:rgba(255,247,234,.55);}
+  .camp-by b{color:var(--accent);}
+  .camp-line{height:1px;background:rgba(255,255,255,.16);margin:24px 0 22px;}
+  .camp-fin{font-family:var(--serif);font-size:86px;letter-spacing:7px;color:#FFF9EE;margin:0 0 8px;line-height:1.15;}
+  .camp-motto{font-family:var(--kai,"华文楷体",serif);font-size:24px;letter-spacing:.26em;color:rgba(255,247,234,.65);}
+  .camp-cta{display:flex;justify-content:space-between;align-items:flex-end;margin-top:26px;}
+  .camp-cta p{margin:0;font-size:18px;line-height:1.8;color:rgba(255,247,234,.55);}
+  .camp-cta p b{color:var(--accent);}
+  .camp-cta .next{font-size:18px;color:var(--accent);text-align:right;letter-spacing:.06em;}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+
+<script src="../data/schools.js?v=5"></script>
+<script src="../data/schools_extra.js?v=5"></script>
+<script src="../data/dut_rich.js"></script>
+<script src="../data/schools_211.js?v=5"></script>
+<script>
+(function(){
+  var params = new URLSearchParams(location.search);
+  var id = params.get('id') || window.SCHOOL_ORDER[0];
+  var s = window.SCHOOLS[id];
+  var series = s.series || '985';
+  if(!s){ document.body.innerHTML = '<h1 style="color:#fff;padding:40px">School not found</h1>'; return; }
+  document.documentElement.style.setProperty('--c', s.color);
+  document.documentElement.style.setProperty('--cd', s.dark);
+  document.documentElement.style.setProperty('--accent', s.accent);
+  document.documentElement.style.setProperty('--paper', s.paper);
+
+  function emblem(){
+    var e = s.emblem || {};
+    if(e.type === 'img'){
+      var bg = e.bg === 'dark' ? 'rgba(255,255,255,.08)' : '#FFF8EC';
+      return '<div class="seal" style="background:'+bg+'"><img src="../'+e.src+'" alt=""></div>';
+    }
+    return '<div class="seal mono" style="background:#FFF8EC;color:'+s.color+';border:2px solid '+s.color+'">'+e.text+'<small>'+e.sub+'</small></div>';
+  }
+
+  function cover(){
+    var L = s.name.length;
+    var nameSize = L >= 8 ? '92px' : (L >= 6 ? '108px' : '150px');
+    var stats = s.stats.map(function(st){
+      return '<div class="cover-stat"><b>'+st.n+'<small>'+st.u+'</small></b><span>'+st.l+'<br>'+st.s+'</span></div>';
+    }).join('');
+    var tags = s.tags.map(function(t){return '<span>'+t+'</span>';}).join('');
+    return '<section class="slide cover" data-mark="'+(s.place||s.short)+'">'
+      +'<div class="cover-inner">'
+      +'<div class="topbar"><span class="brand">我的大学 · '+series+' 系列</span><span>'+s.city+'</span><span>01 / 04</span></div>'
+      +'<div class="cover-head">'+emblem()
+      +'<div class="cover-kicker">'+s.type+' · '+s.city+'</div>'
+      +'<div class="cover-right"><b>'+series+'</b><span>'+(series==='211'?'工程 · 2026':'首批 · 2026')+'</span></div></div>'
+      +'<div class="cover-name" style="font-size:'+nameSize+'">'+s.name+'</div>'
+      +'<div class="cover-en">'+s.en+'</div>'
+      +'<div class="cover-hook">'+s.hook+'</div>'
+      +'<div class="cover-sub">'+s.sub+'</div>'
+      +'<div class="cover-tags">'+tags+'</div>'
+      +'<div class="cover-stats">'+stats+'</div>'
+      +'<div class="cover-foot"><span><b>2026</b> 数据参考 · 以官方为准</span><span>左滑看专业 →</span></div>'
+      +'</div></section>';
+  }
+
+  function majors(){
+    var isStd = !!s.standard;
+    var cards = s.majors.map(function(m,i){
+      var tags = m.tags.map(function(t){return '<span>'+t+'</span>';}).join('');
+      return '<div class="m-card" data-no="0'+(i+1)+'">'
+        +'<div class="m-top"><span class="no">0'+(i+1)+'</span><span class="m-tag">'+m.tags[0]+'</span></div>'
+        +'<h3>'+m.name+'</h3><div class="sub">'+m.sub+'</div>'
+        +'<p class="m-line"><b>学</b>'+m.learn+'</p>'
+        +'<p class="m-line"><b>去</b>'+m.go+'</p>'
+        +'<p class="m-line"><b>特</b>'+m.feature+'</p>'
+        +'<div class="m-tags">'+tags+'</div></div>';
+    }).join('');
+    var sub = s.name + ' 的 6 个代表专业：学什么、有什么特色、毕业去哪儿。';
+    var strip = isStd
+      ? '这里列的是 '+s.name+' 的 6 个代表专业。<br>更多方向在本科招生网。'
+      : (s.rich ? '这里列的是 6 个代表专业。<br>'+s.name+'有 7 个 A 类学科。' : '没展开的方向还有很多。<br>'+s.name+'共有 <b>'+s.stats[0].n+' 个 A+ 学科</b>。');
+    return '<section class="slide majors">'
+      +'<div class="topbar" style="color:#7B6E78;border-color:rgba(36,26,38,.12)"><span class="brand" style="color:'+s.accent+'">我的大学 · '+series+' 系列</span><span>'+s.name+' / 2026</span><span>02 / 04</span></div>'
+      +'<div class="inner"><div class="m-head"><div class="m-no">02</div><h2 class="m-title">专业地图</h2></div>'
+      +'<p class="m-sub">'+sub+'</p>'
+      +'<div class="m-grid'+(isStd?' standard':'')+'">'+cards+'</div>'
+      +'<div class="m-note"><b>看专业：</b>'+s.name+' 的强项、课程和毕业去向，要放在一起看。</div>'
+      +'<div class="m-strip"><p>'+strip+'</p><div class="go">左滑看就业 →</div></div>'
+      +'<div class="m-foot"><span>完整专业目录、选科要求，以学校本科招生网为准。</span><span>DATA 2026.11</span></div>'
+      +'</div></section>';
+  }
+
+  var BAOYAN = { tsinghua: 76, pku: 68, fudan: 45, sjtu: 44.4, zju: 38 };
+
+  function industriesFor(majors){
+    var text = majors.map(function(m){ return m.name; }).join(" ");
+    var rules = [
+      [["计算机", "软件", "人工智能", "电子", "通信", "自动化", "微电子", "光电"], ["互联网", "芯片", "智能制造"]],
+      [["机械", "车辆", "航空", "飞行器", "能源", "动力", "船舶", "海洋", "兵器", "武器", "核"], ["装备制造", "航空航天", "能源电力"]],
+      [["材料", "化工", "化学", "环境", "生物", "食品", "药学", "临床", "口腔"], ["材料化工", "医药健康", "新能源"]],
+      [["土木", "建筑", "水利", "交通", "城乡规划"], ["建筑基建", "设计院", "城市更新"]],
+      [["经济", "金融", "会计", "管理", "工商", "统计"], ["金融", "咨询", "央企"]],
+      [["法学", "新闻", "中文", "外语", "哲学", "历史", "社会学", "民族"], ["法律", "媒体", "公共部门"]],
+      [["农学", "林学", "动物", "草业", "生态", "水产", "园艺"], ["农业", "食品", "生物科技"]]
+    ];
+    var out = [];
+    rules.forEach(function(rule){
+      var hit = false;
+      rule[0].forEach(function(k){ if(text.indexOf(k) >= 0) hit = true; });
+      if(hit){
+        rule[1].forEach(function(t){ if(out.indexOf(t) < 0) out.push(t); });
+      }
+    });
+    return out.slice(0, 5);
+  }
+
+  function outcomes(){
+    if(s.rich) return richOutcomes();
+    if(s.standard) return standardOutcomes();
+    var minis = s.outcome.minis.map(function(m){return '<div><b>'+m.n+'</b><span>'+m.l+'</span></div>';}).join('');
+    var companies = s.outcome.companies.map(function(c){return '<span>'+c+'</span>';}).join('');
+    var majors = s.majors.map(function(m){return '<span>'+m.name+'</span>';}).join('');
+    var industries = industriesFor(s.majors).map(function(c){return '<span>'+c+'</span>';}).join('');
+    var by = BAOYAN[s.id] || "—";
+    var profile = '<div><b>'+s.stats[0].n+s.stats[0].u+'</b><span>A+ 学科</span></div>'
+      + '<div><b>6个</b><span>王牌专业</span></div>'
+      + '<div><b>'+by+'%</b><span>2026届保研</span></div>'
+      + '<div><b>'+s.stats[3].n+s.stats[3].u+'</b><span>本科深造</span></div>';
+    return '<section class="slide">'
+      +'<div class="out-top" data-mark="'+(s.place||s.short)+'"><div class="inner">'
+      +'<div class="topbar" style="color:rgba(255,247,234,.5);border-color:rgba(255,255,255,.16)"><span class="brand" style="color:'+s.accent+'">我的大学 · '+series+' 系列</span><span>'+s.name+' / 2026</span><span>03 / 04</span></div>'
+      +'<div class="out-head"><div class="out-no">03</div><h2 class="out-title">毕业去哪儿</h2></div>'
+      +'<div class="out-big"><div class="n">'+s.outcome.big+'<small>'+s.outcome.unit+'</small></div><div class="t"><b>'+s.outcome.label+'</b>'+s.outcome.note+'</div></div>'
+      +'<div class="out-mini">'+minis+'</div>'
+      +'<div class="out-comlabel">重点去向</div><div class="out-companies">'+companies+'</div>'
+      +'<div class="out-quote">'+s.outcome.quote+'</div>'
+      +'<div class="out-takeaway">不含分省分数，只看学科、保研和去向。</div>'
+      +'</div></div>'
+      +'<div class="out-bottom" data-series="'+series+'">'
+      +'<div class="out-bhead"><h2>学科与就业</h2><span>A+ / 保研 / 6 专业</span></div>'
+      +'<div class="out-profile">'+profile+'</div>'
+      +'<div class="out-majorlabel">'+s.name+' 的 6 个代表专业</div>'
+      +'<div class="out-majorchips">'+majors+'</div>'
+      +'<div class="out-majorlabel">就业主战场</div>'
+      +'<div class="out-majorchips">'+industries+'</div>'
+      +'<div class="out-foot"><span>左滑看校园 →</span><span>#'+s.short+' #'+series+'</span></div>'
+      +'</div></section>';
+  }
+
+  function richOutcomes(){
+    var minis = s.outcome.minis.map(function(m){return '<div><b>'+m.n+'</b><span>'+m.l+'</span></div>';}).join('');
+    var subjects = s.outcome.companies.map(function(c){return '<span>'+c+'</span>';}).join('');
+    var profile = s.richProfile.map(function(p){return '<div><b>'+p.n+'</b><span>'+p.l+'</span></div>';}).join('');
+    var employers = s.richEmployers.map(function(c){return '<span>'+c+'</span>';}).join('');
+    var clusters = s.richClusters.map(function(c){return '<div><b>'+c.t+'</b>'+c.d+'</div>';}).join('');
+    return '<section class="slide">'
+      +'<div class="out-top" data-mark="'+(s.place||s.short)+'"><div class="inner">'
+      +'<div class="topbar" style="color:rgba(255,247,234,.5);border-color:rgba(255,255,255,.16)"><span class="brand" style="color:'+s.accent+'">我的大学 · '+series+' 系列</span><span>'+s.name+' / 2026</span><span>03 / 04</span></div>'
+      +'<div class="out-head"><div class="out-no">03</div><h2 class="out-title">报考数据</h2></div>'
+      +'<div class="out-big"><div class="n">'+s.outcome.big+'<small>'+s.outcome.unit+'</small></div><div class="t"><b>'+s.outcome.label+'</b>'+s.outcome.note+'</div></div>'
+      +'<div class="out-mini">'+minis+'</div>'
+      +'<div class="out-comlabel">A类学科</div><div class="out-companies">'+subjects+'</div>'
+      +'<div class="out-quote">'+s.outcome.quote+'</div>'
+      +'<div class="out-takeaway">不含分省分数，只看学科、保研和去向。</div>'
+      +'</div></div>'
+      +'<div class="out-bottom" data-series="'+series+'">'
+      +'<div class="out-bhead"><h2>大工就业去向</h2><span>世界500强 / 领军</span></div>'
+      +'<div class="out-profile">'+profile+'</div>'
+      +'<div class="out-majorlabel">重点单位</div>'
+      +'<div class="out-majorchips">'+employers+'</div>'
+      +'<div class="out-majorlabel">就业集群</div>'
+      +'<div class="out-clusters">'+clusters+'</div>'
+      +'<div class="out-foot"><span>左滑看校园 →</span><span>#'+s.short+' #'+series+'</span></div>'
+      +'</div></section>';
+  }
+
+  function standardOutcomes(){
+    var minis = s.outcome.minis.map(function(m){return '<div><b>'+m.n+'</b><span>'+m.l+'</span></div>';}).join('');
+    var chips = s.outcome.companies.map(function(c){return '<span>'+c+'</span>';}).join('');
+    var industries = (s.outcome.industries || []).map(function(c){return '<span>'+c+'</span>';}).join('');
+    return '<section class="slide">'
+      +'<div class="out-top" data-mark="'+(s.place||s.short)+'"><div class="inner">'
+      +'<div class="topbar" style="color:rgba(255,247,234,.5);border-color:rgba(255,255,255,.16)"><span class="brand" style="color:'+s.accent+'">我的大学 · '+series+' 系列</span><span>'+s.name+' / 2026</span><span>03 / 04</span></div>'
+      +'<div class="out-head"><div class="out-no">03</div><h2 class="out-title">报考数据</h2></div>'
+      +'<div class="out-big"><div class="n">'+s.outcome.big+'<small>'+s.outcome.unit+'</small></div><div class="t"><b>'+s.outcome.label+'</b>'+s.outcome.note+'</div></div>'
+      +'<div class="out-mini">'+minis+'</div>'
+      +'<div class="out-comlabel">'+(s.ap ? 'A+ 学科 / 强势专业' : '强势专业')+'</div><div class="out-companies">'+chips+'</div>'
+      +'<div class="out-takeaway">不含分省分数，只看学科、保研和去向。</div>'
+      +'</div></div>'
+      +'<div class="out-bottom" data-series="'+series+'">'
+      +'<div class="out-bhead"><h2>就业与专业</h2><span>6 个代表专业</span></div>'
+      +'<div class="out-majorlabel">'+s.name+' 的 6 个代表专业</div>'
+      +'<div class="out-majorchips">'+s.majors.map(function(m){return '<span>'+m.name+'</span>';}).join('')+'</div>'
+      +'<div class="out-majorlabel">就业主战场</div>'
+      +'<div class="out-majorchips">'+industries+'</div>'
+      +'<div class="out-foot"><span>左滑看校园 →</span><span>#'+s.short+' #'+series+'</span></div>'
+      +'</div></section>';
+  }
+
+  var landmarks = {
+    tsinghua: `<svg viewBox="0 0 800 380" role="img" aria-label="二校门插画">
+          <defs>
+            <linearGradient id="gateWash2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#D9B8E3" stop-opacity=".30"/>
+              <stop offset="1" stop-color="#D9B8E3" stop-opacity=".06"/>
+            </linearGradient>
+          </defs>
+          <circle cx="648" cy="92" r="58" fill="#E3C08A" opacity=".42"/>
+          <circle cx="648" cy="92" r="74" fill="none" stroke="#B58A4B" stroke-width="1" opacity=".35"/>
+          <path d="M96 330 H704" stroke="#5B0C66" stroke-width="2" opacity=".65"/>
+          <path d="M66 340 H734" stroke="#5B0C66" stroke-width="1" opacity=".35"/>
+          <path d="M46 350 H754" stroke="#5B0C66" stroke-width="1" opacity=".18"/>
+
+          <g stroke="#5B0C66" stroke-width="2" fill="none" opacity=".55">
+            <path d="M104 330 V282"/><circle cx="104" cy="262" r="22"/><circle cx="86" cy="276" r="16"/><circle cx="122" cy="276" r="16"/>
+            <path d="M176 330 V290"/><circle cx="176" cy="272" r="18"/><circle cx="160" cy="284" r="13"/><circle cx="192" cy="284" r="13"/>
+            <path d="M632 330 V286"/><circle cx="632" cy="266" r="20"/><circle cx="614" cy="280" r="14"/><circle cx="650" cy="280" r="14"/>
+            <path d="M704 330 V292"/><circle cx="704" cy="274" r="16"/><circle cx="690" cy="286" r="11"/><circle cx="718" cy="286" r="11"/>
+          </g>
+
+          <g fill="url(#gateWash2)" stroke="#5B0C66" stroke-width="2.2">
+            <rect x="150" y="208" width="138" height="122"/>
+            <rect x="512" y="208" width="138" height="122"/>
+          </g>
+          <g fill="none" stroke="#5B0C66" stroke-width="1.6" opacity=".8">
+            <path d="M168 208 V330 M188 208 V330 M238 208 V330 M250 208 V330 M270 208 V330"/>
+            <path d="M530 208 V330 M550 208 V330 M600 208 V330 M612 208 V330 M632 208 V330"/>
+            <path d="M186 238 A18 18 0 0 1 222 238 V262 H186 Z"/>
+            <path d="M548 238 A18 18 0 0 1 584 238 V262 H548 Z"/>
+          </g>
+
+          <rect x="280" y="196" width="240" height="134" fill="url(#gateWash2)" stroke="#5B0C66" stroke-width="2.2"/>
+
+          <g fill="#FBF7EF" stroke="#5B0C66" stroke-width="2.2">
+            <path d="M296 330 V252 A22 22 0 0 1 340 252 V330 Z"/>
+            <path d="M374 330 V230 A26 26 0 0 1 426 230 V330 Z"/>
+            <path d="M460 330 V252 A22 22 0 0 1 504 252 V330 Z"/>
+          </g>
+
+          <g fill="#FBF7EF" stroke="#5B0C66" stroke-width="2.2">
+            <rect x="288" y="204" width="12" height="126"/>
+            <rect x="346" y="204" width="12" height="126"/>
+            <rect x="442" y="204" width="12" height="126"/>
+            <rect x="500" y="204" width="12" height="126"/>
+          </g>
+          <g stroke="#5B0C66" stroke-width="1" opacity=".55">
+            <path d="M292 210 V326 M295 210 V326"/>
+            <path d="M350 210 V326 M353 210 V326"/>
+            <path d="M446 210 V326 M449 210 V326"/>
+            <path d="M504 210 V326 M507 210 V326"/>
+          </g>
+          <g fill="#FBF7EF" stroke="#5B0C66" stroke-width="2">
+            <rect x="283" y="196" width="22" height="8"/><rect x="341" y="196" width="22" height="8"/>
+            <rect x="437" y="196" width="22" height="8"/><rect x="495" y="196" width="22" height="8"/>
+            <rect x="283" y="322" width="22" height="8"/><rect x="341" y="322" width="22" height="8"/>
+            <rect x="437" y="322" width="22" height="8"/><rect x="495" y="322" width="22" height="8"/>
+          </g>
+
+          <g fill="#FBF7EF" stroke="#5B0C66" stroke-width="2.2">
+            <rect x="272" y="150" width="256" height="46"/>
+            <rect x="352" y="160" width="96" height="28"/>
+          </g>
+          <text x="400" y="180" text-anchor="middle" font-family="'华文楷体','KaiTi',serif" font-size="17" fill="#5B0C66" letter-spacing="3">清华园</text>
+
+          <g fill="none" stroke="#5B0C66" stroke-width="2">
+            <path d="M264 128 H536 M264 148 H536"/>
+            <path d="M270 128 V148 M282 128 V148 M294 128 V148 M306 128 V148 M318 128 V148 M330 128 V148 M342 128 V148 M354 128 V148 M366 128 V148 M378 128 V148 M390 128 V148 M402 128 V148 M414 128 V148 M426 128 V148 M438 128 V148 M450 128 V148 M462 128 V148 M474 128 V148 M486 128 V148 M498 128 V148 M510 128 V148 M522 128 V148 M530 128 V148"/>
+          </g>
+          <path d="M258 128 H542" stroke="#5B0C66" stroke-width="2.5"/>
+          <g fill="#E8D9EC" stroke="#5B0C66" stroke-width="1.2">
+            <rect x="262" y="330" width="276" height="7"/>
+            <rect x="250" y="337" width="300" height="7"/>
+            <rect x="238" y="344" width="324" height="6"/>
+          </g>
+          <ellipse cx="400" cy="356" rx="220" ry="9" fill="#5B0C66" opacity=".08"/>
+          <g fill="none" stroke="#5B0C66" stroke-width="1.6" opacity=".5">
+            <path d="M560 58 q6 -6 12 0 q6 -6 12 0"/>
+            <path d="M592 42 q5 -5 10 0 q5 -5 10 0"/>
+            <path d="M528 78 q4 -4 8 0 q4 -4 8 0"/>
+          </g>
+        </svg>`,
+    pku: '<svg viewBox="0 0 800 380"><circle cx="648" cy="86" r="56" fill="#E3C08A" opacity=".42"/><circle cx="648" cy="86" r="72" fill="none" stroke="#B58A4B" stroke-width="1" opacity=".35"/><g stroke="currentColor" fill="none" stroke-width="2.2"><path d="M40 318 Q200 300 400 312 T760 318"/><path d="M40 334 Q200 316 400 328 T760 334" opacity=".5"/><path d="M330 312 V300 H414 V312"/><rect x="342" y="196" width="60" height="106"/><path d="M326 196 H418 L404 180 H340 Z"/><path d="M334 166 H410 L398 152 H346 Z"/><path d="M342 140 H402 L392 128 H352 Z"/><path d="M350 118 H394 L386 108 H358 Z"/><path d="M366 108 V82"/><path d="M358 82 H374"/><path d="M350 312 V222 M394 312 V222"/><path d="M366 222 V186"/><path d="M336 250 H408" opacity=".5"/></g><g stroke="currentColor" fill="none" stroke-width="2" opacity=".55"><path d="M110 318 V272"/><circle cx="110" cy="252" r="22"/><circle cx="90" cy="268" r="15"/><circle cx="130" cy="268" r="15"/><path d="M690 318 V276"/><circle cx="690" cy="256" r="20"/><circle cx="672" cy="270" r="13"/><circle cx="708" cy="270" r="13"/></g><text x="400" y="356" text-anchor="middle" font-family="serif" font-size="18" fill="currentColor" letter-spacing="4">博雅塔 · 未名湖</text></svg>',
+    fudan: '<svg viewBox="0 0 800 380"><circle cx="650" cy="84" r="54" fill="#E3C08A" opacity=".4"/><g stroke="currentColor" fill="none" stroke-width="2.2"><path d="M70 328 H730"/><rect x="280" y="96" width="90" height="232"/><rect x="430" y="96" width="90" height="232"/><rect x="250" y="276" width="300" height="52"/><path d="M280 96 V78 H370 V96 M430 96 V78 H520 V96"/><path d="M300 120 V268 M322 120 V268 M344 120 V268 M460 120 V268 M482 120 V268 M504 120 V268" opacity=".55"/><path d="M370 96 H430" opacity=".6"/><path d="M252 276 H548" opacity=".6"/><path d="M250 288 H550 M240 300 H560" opacity=".45"/></g><g stroke="currentColor" fill="none" stroke-width="2" opacity=".5"><path d="M130 328 V286"/><circle cx="130" cy="268" r="18"/><circle cx="114" cy="280" r="12"/><circle cx="146" cy="280" r="12"/><path d="M670 328 V286"/><circle cx="670" cy="268" r="18"/><circle cx="654" cy="280" r="12"/><circle cx="686" cy="280" r="12"/></g><text x="400" y="356" text-anchor="middle" font-family="serif" font-size="18" fill="currentColor" letter-spacing="4">光华楼</text></svg>',
+    sjtu: '<svg viewBox="0 0 800 380"><circle cx="650" cy="88" r="54" fill="#E3C08A" opacity=".4"/><g stroke="currentColor" fill="none" stroke-width="2.2"><path d="M60 330 H740"/><path d="M180 330 V212 H620 V330"/><path d="M160 212 H640 L620 190 H180 Z"/><rect x="200" y="220" width="30" height="110"/><rect x="260" y="220" width="30" height="110"/><rect x="510" y="220" width="30" height="110"/><rect x="570" y="220" width="30" height="110"/><path d="M330 330 V250 A70 70 0 0 1 470 250 V330"/><path d="M360 330 V258 A40 40 0 0 1 440 258 V330" opacity=".6"/><rect x="366" y="200" width="68" height="26"/></g><text x="400" y="219" text-anchor="middle" font-family="serif" font-size="17" fill="currentColor" letter-spacing="3">交大</text><g stroke="currentColor" fill="none" stroke-width="2" opacity=".5"><path d="M110 330 V280"/><circle cx="110" cy="260" r="20"/><circle cx="92" cy="274" r="14"/><circle cx="128" cy="274" r="14"/><path d="M700 330 V280"/><circle cx="700" cy="260" r="20"/><circle cx="682" cy="274" r="14"/><circle cx="718" cy="274" r="14"/></g><text x="400" y="356" text-anchor="middle" font-family="serif" font-size="18" fill="currentColor" letter-spacing="4">东大门</text></svg>',
+    zju: '<svg viewBox="0 0 800 380"><circle cx="652" cy="86" r="54" fill="#E3C08A" opacity=".4"/><g stroke="currentColor" fill="none" stroke-width="2.2"><path d="M60 330 H740"/><path d="M200 330 V240 H600 V330"/><path d="M180 240 H620 L600 220 H200 Z"/><path d="M300 240 V200 A100 100 0 0 1 500 200 V240"/><path d="M280 200 H520 L500 182 H300 Z"/><path d="M320 200 V240 M360 200 V240 M440 200 V240 M480 200 V240" opacity=".6"/><rect x="370" y="205" width="60" height="24"/><path d="M210 330 V258 M240 330 V258 M560 330 V258 M590 330 V258"/><path d="M180 240 H620" opacity=".7"/></g><text x="400" y="223" text-anchor="middle" font-family="serif" font-size="17" fill="currentColor" letter-spacing="3">求是</text><g stroke="currentColor" fill="none" stroke-width="2" opacity=".5"><path d="M120 330 V286"/><circle cx="120" cy="266" r="19"/><circle cx="103" cy="279" r="13"/><circle cx="137" cy="279" r="13"/><path d="M682 330 V286"/><circle cx="682" cy="266" r="19"/><circle cx="665" cy="279" r="13"/><circle cx="699" cy="279" r="13"/></g><text x="400" y="356" text-anchor="middle" font-family="serif" font-size="18" fill="currentColor" letter-spacing="4">求是大讲堂</text></svg>'
+  };
+
+  function standardGate(name){
+    return '<svg viewBox="0 0 800 380">'
+      +'<circle cx="650" cy="86" r="54" fill="#E3C08A" opacity=".4"/>'
+      +'<g stroke="currentColor" fill="none" stroke-width="2.2">'
+      +'<path d="M60 330 H740"/>'
+      +'<path d="M150 330 V220 H650 V330"/>'
+      +'<path d="M130 220 H670 L650 198 H150 Z"/>'
+      +'<path d="M200 330 V250 M240 330 V250 M560 330 V250 M600 330 V250"/>'
+      +'<path d="M345 330 V290 A55 55 0 0 1 455 290 V330"/>'
+      +'<rect x="360" y="200" width="80" height="28"/>'
+      +'<path d="M150 250 H650" opacity=".5"/>'
+      +'</g>'
+      +'<text x="400" y="220" text-anchor="middle" font-family="serif" font-size="17" fill="currentColor" letter-spacing="3">'+name+'</text>'
+      +'<g stroke="currentColor" fill="none" stroke-width="2" opacity=".5">'
+      +'<path d="M110 330 V286"/><circle cx="110" cy="266" r="18"/><circle cx="94" cy="279" r="12"/><circle cx="126" cy="279" r="12"/>'
+      +'<path d="M690 330 V286"/><circle cx="690" cy="266" r="18"/><circle cx="674" cy="279" r="12"/><circle cx="706" cy="279" r="12"/>'
+      +'</g>'
+      +'<text x="400" y="356" text-anchor="middle" font-family="serif" font-size="18" fill="currentColor" letter-spacing="4">校门</text>'
+      +'</svg>';
+  }
+
+  function campus(){
+    var facts = s.campus.facts.map(function(f){return '<div><b>'+f.n+'</b><span>'+f.l+'</span></div>';}).join('');
+    var guide = s.campus.guide.map(function(g,i){return '<div><b>0'+(i+1)+'</b>'+g+'</div>';}).join('');
+    return '<section class="slide">'
+      +'<div class="camp-top">'
+      +'<div class="topbar" style="color:#7B6E78;border-color:rgba(36,26,38,.12)"><span class="brand" style="color:'+s.accent+'">我的大学 · '+series+' 系列</span><span>'+s.name+' / 2026</span><span>04 / 04</span></div>'
+      +'<div class="camp-head"><div class="camp-no">04</div><h2 class="camp-title">在'+(s.place||s.short)+'生活</h2></div>'
+      +'<div class="landmark">'+(s.landmark === 'standard' ? standardGate(s.short) : (landmarks[s.landmark]||''))+'</div>'
+      +'<div class="camp-facts">'+facts+'</div>'
+      +'<div class="camp-guide-title">校园生存指南</div>'
+      +'<div class="camp-guide">'+guide+'</div>'
+      +'<div class="camp-keywords">'+(s.campus.keywords||[]).map(function(k){return '<span>'+k+'</span>';}).join('')+'</div>'
+      +'<div class="camp-alumni">'+s.campus.alumni+'</div>'
+      +'</div>'
+      +'<div class="camp-bottom" data-year="'+s.campus.facts[0].n+'">'
+      +'<div class="camp-quote">'+s.campus.quote+'</div>'
+      +'<div class="camp-by"><b>'+s.campus.quoteBy+'</b></div>'
+      +'<div class="camp-line"></div>'
+      +'<div class="camp-fin">下一站，'+(s.nick||s.short)+'。</div>'
+      +'<div class="camp-motto">自 '+s.campus.facts[0].n+' 年以来</div>'
+      
+      +'</div></section>';
+  }
+
+  var slides = [cover(), majors(), outcomes(), campus()];
+  var only = parseInt(params.get('only') || '0', 10);
+  document.getElementById('deck').innerHTML = only ? (slides[only - 1] || slides[0]) : slides.join('');
+})();
+</script>
+</body>
+</html>

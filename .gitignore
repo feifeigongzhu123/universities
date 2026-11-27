@@ -1,0 +1,25 @@
+# 渲染临时文件
+build/*.png
+build/school_*.png
+build/major_*.png
+build/.edge*/
+build/.edge-*
+build/major_pages/
+build/__pycache__/
+__pycache__/
+tmp/
+*.log
+
+# 源 PNG 保留本地，仓库用 WebP
+assets/covers/**/*.png
+assets/majors/**/*.png
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 本地环境
+.venv/
+venv/
+node_modules/

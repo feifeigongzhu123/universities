@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>专业介绍 · 我的大学</title>
+<style>
+  :root{--purple:#5B0C66;--deep:#2A0631;--paper:#F5F0E6;--ink:#241A26;--soft:#5A4A5C;--gold:#C9A063;
+    --serif:"方正粗黑宋简体","华文中宋","Songti SC","宋体",serif;--sans:"微软雅黑","Noto Sans SC",sans-serif;--num:Georgia,serif;}
+  *{box-sizing:border-box}html,body{margin:0;height:100%}
+  body{background:radial-gradient(900px 700px at 50% -10%,rgba(91,12,102,.55),transparent 65%),linear-gradient(160deg,#160318,#0D0110);color:#FFF7EA;font-family:var(--sans);overflow:hidden}
+  a{color:inherit;text-decoration:none}.app{min-height:100%;display:flex;align-items:center;justify-content:center;gap:44px;padding:24px 22px}
+  .phone{position:relative;width:min(430px,calc((100vh - 48px)*.5625));aspect-ratio:9/16;border-radius:34px;overflow:hidden;background:#0B020D;border:1px solid rgba(255,255,255,.16);box-shadow:0 40px 120px rgba(0,0,0,.55),0 0 0 8px rgba(255,255,255,.035);flex:none}
+  #slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:opacity .25s;background:var(--deep)}
+  .back{position:absolute;top:10px;left:12px;z-index:5;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-size:16px}
+  .controls{position:absolute;left:16px;right:16px;bottom:22px;z-index:5;display:flex;justify-content:space-between;align-items:center}
+  .group{display:flex;gap:8px;align-items:center}.ctrl{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#FFF7EA;font-size:14px;display:grid;place-items:center;cursor:pointer}.ctrl.main{width:48px;height:48px;background:#FFF3D8;color:#241A26;border:0;font-size:16px}
+  .side{max-width:360px}.kicker{font-size:11px;letter-spacing:.18em;color:var(--gold)}.side h1{font-family:var(--serif);font-size:38px;font-weight:400;line-height:1.2;margin:8px 0 4px;color:#FFF9EE}.en{font-family:var(--num);font-size:11px;letter-spacing:.16em;color:rgba(244,238,227,.42)}.def{font-size:14px;line-height:1.9;color:rgba(244,238,227,.75);margin-top:16px}.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.tags span{font-size:11px;border:1px solid rgba(255,255,255,.2);padding:4px 8px;color:rgba(255,255,255,.75)}.meta{font-size:11px;line-height:1.9;color:rgba(244,238,227,.45);border-top:1px solid rgba(255,255,255,.14);padding-top:14px;margin-top:20px}.backlink{display:inline-block;font-size:11px;color:rgba(244,238,227,.55);border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:3px;margin-top:16px}
+  @media(max-width:900px){body{overflow:auto}.app{padding:0;display:block}.phone{width:100vw;height:100vh;height:100dvh;aspect-ratio:auto;border-radius:0;border:0;box-shadow:none}#slide{object-fit:contain}.side{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="phone"><img id="slide" alt=""><a class="back" id="backFab" href="majors.html">←</a>
+    <div class="controls"><div class="group"><button class="ctrl" id="prev">←</button><button class="ctrl main" id="play">▶</button><button class="ctrl" id="next">→</button></div><button class="ctrl" id="mute">🔊</button></div>
+  </div>
+  <aside class="side"><div class="kicker">专业介绍 · 通用版</div><h1 id="name">专业</h1><div class="en" id="en"></div><p class="def" id="def"></p><div class="tags" id="tags"></div><div class="meta" id="meta"></div><a class="backlink" href="majors.html">← 返回专业目录</a></aside>
+</div>
+<script src="data/majors.js"></script>
+<script>
+(function(){
+  var p=new URLSearchParams(location.search), id=p.get('id')||'cs', m=window.MAJORS&&(window.MAJORS[id]||window.MAJORS.cs);
+  if(!m){document.body.innerHTML='<p style="padding:40px;color:#fff">没有找到这个专业。</p>';return;}
+  document.title=m.name+' · 专业介绍';document.getElementById('name').textContent=m.name;if(m.name.length>=8)document.getElementById('name').style.fontSize='30px';document.getElementById('en').textContent=m.en;document.getElementById('def').textContent=m.def;
+  document.getElementById('tags').innerHTML=m.tags.map(function(t){return '<span>'+t+'</span>'}).join('');
+  document.getElementById('meta').innerHTML='4 张图 · 4 段语音<br>'+m.years+' / 学什么 / 毕业做什么';
+  var total=4,index=0,started=false,muted=false,img=document.getElementById('slide'),play=document.getElementById('play'),mute=document.getElementById('mute');
+  var voice=new Audio();voice.preload='auto';var bgm=new Audio('assets/music/bgm.wav');bgm.loop=true;bgm.volume=.08;
+  function ip(i){return 'assets/majors/'+m.id+'/0'+i+'.webp'}function ap(i){return 'audio/majors/'+m.id+'/0'+i+'.mp3'}
+  function show(i,go){index=(i+total)%total;img.style.opacity=0;var pre=new Image();pre.onload=pre.onerror=function(){img.src=ip(index+1);img.style.opacity=1};pre.src=ip(index+1);if(started){voice.pause();voice.src=ap(index+1);voice.load();if(go!==false)voice.play().catch(function(){play.textContent='▶'})}}
+  function start(){started=true;bgm.play().catch(function(){});voice.src=ap(index+1);voice.play().catch(function(){play.textContent='▶'})}
+  function toggle(){if(voice.paused){voice.play().catch(function(){});bgm.play().catch(function(){});play.textContent='❚❚'}else{voice.pause();bgm.pause();play.textContent='▶'}}
+  voice.onended=function(){if(index<total-1)setTimeout(function(){if(voice.paused)show(index+1,true)},700);else{bgm.pause();play.textContent='▶'}};voice.onplay=function(){play.textContent='❚❚'};voice.onpause=function(){if(!voice.ended)play.textContent='▶'};
+  play.onclick=toggle;document.getElementById('prev').onclick=function(){show(index-1,true)};document.getElementById('next').onclick=function(){show(index+1,true)};mute.onclick=function(){muted=!muted;voice.muted=bgm.muted=muted;mute.textContent=muted?'🔇':'🔊'};
+  document.addEventListener('keydown',function(e){if(e.key==='ArrowLeft')show(index-1,true);if(e.key==='ArrowRight')show(index+1,true);if(e.key===' '){e.preventDefault();toggle()}});
+  var tx=0;img.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});img.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>44)show(index+(dx<0?1:-1),true)},{passive:true});
+  show(0,false);start();
+})();
+</script>
+</body>
+</html>
